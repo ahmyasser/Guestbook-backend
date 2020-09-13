@@ -37,7 +37,7 @@ router.post('/post',requireLogin,(req,res)=>{
     })
 })
 
-router.get('/mypost',requireLogin,(req,res)=>{
+router.get('/myposts',requireLogin,(req,res)=>{
     Post.find({postedBy:req.user._id})
     .populate("PostedBy","_id name")
     .then(mypost=>{
@@ -47,19 +47,18 @@ router.get('/mypost',requireLogin,(req,res)=>{
         console.log(err)
     })
 })
-/*
-router.put('/comment',requireLogin,(req,res)=>{
-    const comment = {
-        text:req.body.text,
-        postedBy:req.user._id
+
+router.put('/post/:postId',requireLogin,(req,res)=>{
+    const {title,body} = req.body 
+    if(!title || !body ){
+      return  res.status(422).json({error:"Plase add all the fields"})
     }
-    Post.findByIdAndUpdate(req.body.postId,{
-        $push:{comments:comment}
-    },{
-        new:true
-    })
-    .populate("comments.postedBy","_id name")
-    .populate("postedBy","_id name")
+    
+    Post.findByIdAndUpdate({_id:req.params.postId},{
+        title,
+        body
+    },{new:true})
+    .populate("postedBy","_id")
     .exec((err,result)=>{
         if(err){
             return res.status(422).json({error:err})
@@ -68,7 +67,7 @@ router.put('/comment',requireLogin,(req,res)=>{
         }
     })
 })
-*/
+
 router.delete('/post/:postId',requireLogin,(req,res)=>{
     Post.findOne({_id:req.params.postId})
     .populate("postedBy","_id")

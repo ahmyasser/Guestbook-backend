@@ -9,13 +9,14 @@ mongoose.connect(MONGOURI,{
     useUnifiedTopology: true
 
 })
+
 mongoose.connection.on('connected',()=>{
     console.log("conneted to mongodb")
 })
 mongoose.connection.on('error',(err)=>{
     console.log("err connecting",err)
 })
-
+mongoose.set('useFindAndModify', false);
 require ('./models/user');
 require ('./models/post');
 
