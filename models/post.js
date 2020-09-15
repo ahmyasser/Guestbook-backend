@@ -12,7 +12,11 @@ const postSchema = new mongoose.Schema({
     postedBy:{
        type:ObjectId,
        ref:"User"
-    }
+    },
+    replys:[{
+        text:String,
+        postedBy:{type:ObjectId,ref:"User"}
+    }],
 },{timestamps:true})
 
 mongoose.model("Post",postSchema)

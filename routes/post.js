@@ -8,7 +8,7 @@ const Post =  mongoose.model("Post")
 router.get('/posts',requireLogin,(req,res)=>{
     Post.find()
     .populate("postedBy","_id name")
-    .populate("comments.postedBy","_id name")
+    .populate("replys.postedBy","_id name")
     .sort('-createdAt')
     .then((posts)=>{
         res.json({posts})
@@ -82,6 +82,26 @@ router.delete('/post/:postId',requireLogin,(req,res)=>{
               }).catch(err=>{
                   console.log(err)
               })
+        }
+    })
+})
+router.put('/reply',requireLogin,(req,res)=>{
+    const reply = {
+        text:req.body.text,
+        postedBy:req.user._id
+    }
+    Post.findByIdAndUpdate(req.body.postId,{
+        $push:{replys:reply}
+    },{
+        new:true
+    })
+    .populate("replys.postedBy","_id name")
+    .populate("postedBy","_id name")
+    .exec((err,result)=>{
+        if(err){
+            return res.status(422).json({error:err})
+        }else{
+            res.json(result)
         }
     })
 })
