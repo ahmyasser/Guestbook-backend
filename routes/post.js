@@ -58,7 +58,7 @@ router.put('/post/:postId',requireLogin,(req,res)=>{
         title,
         body
     },{new:true})
-    .populate("postedBy","_id")
+    .populate("postedBy","_id name")
     .exec((err,result)=>{
         if(err){
             return res.status(422).json({error:err})
