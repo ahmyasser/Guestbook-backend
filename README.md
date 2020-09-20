@@ -1,5 +1,5 @@
 # mern-task
-a crud app with auth using mern stack
+a server side for Guestbook mern app
 
 To start it
 
