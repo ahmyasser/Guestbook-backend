@@ -1,4 +1,4 @@
-# mern-task
+# Guestbook
 a server side for Guestbook mern app
 
 To start it
